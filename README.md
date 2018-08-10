@@ -30,7 +30,7 @@ plt.show()
 ```
 
 
-![png](index_files/index_5_0.png)
+    <matplotlib.figure.Figure at 0x10a773898>
 
 
 In linear regression, we'd try to find a relationship between age and monthly income. Conceptually, we'd try to fit a line that represents the relationship between age and monthly income, as shown below.
@@ -88,8 +88,11 @@ You can already tell that fitting a straight line will not be exactly desired he
 
 
 ```python
+from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LinearRegression
+
 # create linear regression object
-lin_reg = linear_model.LinearRegression()
+lin_reg = LinearRegression()
 lin_reg.fit(age, income_bin)
 # store the coefficients
 coef = lin_reg.coef_
@@ -117,8 +120,8 @@ You can see that this doesn't make a lot of sense. This straight line cannot gra
 
 
 ```python
-# Create linear regression object
-regr = linear_model.LogisticRegression(C=1e5)
+# Create logistic regression object
+regr = LogisticRegression(C=1e5)
 # Train the model using the training sets
 regr.fit(age, income_bin)
 ```
@@ -233,6 +236,10 @@ from scipy import stats
 stats.chisqprob = lambda chisq, df: stats.chi2.sf(chisq, df)
 ```
 
+    /Users/lore.dirick/anaconda3/lib/python3.6/site-packages/sklearn/cross_validation.py:41: DeprecationWarning: This module was deprecated in version 0.18 in favor of the model_selection module into which all the refactored classes and functions are moved. Also note that the interface of the new CV iterators are different from that of this module. This module will be removed in 0.20.
+      "This module will be removed in 0.20.", DeprecationWarning)
+
+
 
 ```python
 salaries = pd.read_csv("salaries_final.csv", index_col = 0)
@@ -257,6 +264,10 @@ result = logit_model.fit()
              Iterations 6
 
 
+    /Users/lore.dirick/anaconda3/lib/python3.6/site-packages/statsmodels/compat/pandas.py:56: FutureWarning: The pandas.core.datetools module is deprecated and will be removed in a future version. Please use the pandas.tseries module instead.
+      from pandas.core import datetools
+
+
 
 ```python
 result.summary()
@@ -277,10 +288,10 @@ result.summary()
   <th>Method:</th>               <td>MLE</td>       <th>  Df Model:          </th>  <td>     6</td> 
 </tr>
 <tr>
-  <th>Date:</th>          <td>Tue, 15 May 2018</td> <th>  Pseudo R-squ.:     </th>  <td>0.09666</td>
+  <th>Date:</th>          <td>Thu, 09 Aug 2018</td> <th>  Pseudo R-squ.:     </th>  <td>0.09666</td>
 </tr>
 <tr>
-  <th>Time:</th>              <td>18:58:31</td>     <th>  Log-Likelihood:    </th> <td> -16237.</td>
+  <th>Time:</th>              <td>23:05:39</td>     <th>  Log-Likelihood:    </th> <td> -16237.</td>
 </tr>
 <tr>
   <th>converged:</th>           <td>True</td>       <th>  LL-Null:           </th> <td> -17974.</td>
@@ -337,9 +348,11 @@ np.exp(result.params)
 
 
 
+You can also use scikit learn to retrieve the parameter estimates. The disadvantage here though is that there are no p-values for your parameter estimates!
+
 
 ```python
-logreg = LogisticRegression(fit_intercept = False, C = 1e12)
+logreg = LogisticRegression(fit_intercept = False, C = 1e15)
 model_log = logreg.fit(X, y.iloc[:,1])
 model_log
 ```
@@ -347,9 +360,22 @@ model_log
 
 
 
-    LogisticRegression(C=1000000000000.0, class_weight=None, dual=False,
+    LogisticRegression(C=1000000000000000.0, class_weight=None, dual=False,
               fit_intercept=False, intercept_scaling=1, max_iter=100,
               multi_class='ovr', n_jobs=1, penalty='l2', random_state=None,
               solver='liblinear', tol=0.0001, verbose=0, warm_start=False)
+
+
+
+
+```python
+model_log.coef_
+```
+
+
+
+
+    array([[-4.38706343,  0.96178903,  0.14397984, -0.14384057,  0.83689458,
+             1.2067121 ,  0.03871011]])
 
 
